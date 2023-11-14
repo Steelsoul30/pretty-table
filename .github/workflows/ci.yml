@@ -29,11 +29,11 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test /p:CollectCoverage=true /p:IncludeTestAssembly=false /p:CoverletOutputFormat=cobertura /p:CoverletOutput=../reports/coverage_report.xml
+      run: dotnet test /p:CollectCoverage=true /p:IncludeTestAssembly=false /p:CoverletOutputFormat=cobertura /p:CoverletOutput=../reports/coverage/coverage_report.xml
     - name: ReportGenerator
       uses: danielpalme/ReportGenerator-GitHub-Action@5
       with:
-        reports: 'reports\coverage\coverage.opencover.xml'
+        reports: 'reports\coverage\coverage_report.xml'
         targetdir: 'reports\coverage'
         reporttypes: 'Cobertura;Badges;MarkdownSummaryGithub'
         assemblyfilters: '-xunit*'
