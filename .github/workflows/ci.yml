@@ -4,6 +4,7 @@
 name: .NET
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
   pull_request:
@@ -24,6 +25,12 @@ jobs:
       run: dotnet --info
     - name: 'Show dotnet version'
       run: dotnet --version
+    - uses: actions/cache@v3
+      with:
+        path: $\.nuget\packages
+        key: $-nuget-$ #hash of project files
+        restore-keys: |
+          $-nuget-
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
