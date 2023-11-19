@@ -31,15 +31,23 @@ namespace PrettyTable.Tests
 │         │        │       │
 └─────────┴────────┴───────┘
 ";
-			var sw = new StringWriter();
-			Console.SetOut(sw);
 			var firstRow = new[] { "first", "second", "third" };
 			var secondRow = new[] { "fourth", "fifth", "sixth" };
 			var thirdRow = new[] { "seventh", "eighth", "ninth" };
-			new Grid(new GridOptions()).AddRow(firstRow).AddRow(secondRow).AddRow(thirdRow).Normalize().Print();
-			_output.WriteLine(sw.ToString());
+			var actual = new Grid(new Options()).AddRow(firstRow).AddRow(secondRow).AddRow(thirdRow).ToString();
+			_output.WriteLine(actual);
 			_output.WriteLine(expected);
-			Assert.Equal(expected, sw.ToString());
+			Assert.Equal(expected, actual);
+		}
+
+		[Fact]
+		public void TableTest()
+		{
+
+			var firstRow = new[] { "first", "second", "third" };
+			var secondRow = new[] { "fourth", "fifth", "sixth" };
+			var thirdRow = new[] { "seventh", "eighth", "ninth" };
+			var actual = new Table(new Options()).AddRow(firstRow).AddRow(secondRow).AddRow(thirdRow).ToString();
 		}
 
 		private string GetUniqueKey(int size)

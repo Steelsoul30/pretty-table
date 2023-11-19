@@ -1,4 +1,4 @@
-﻿namespace PrettyTable;
+﻿namespace PrettyTable.PrinterService;
 
 public enum BoxCharacters
 {

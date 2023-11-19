@@ -1,12 +1,12 @@
-﻿using System.Text.RegularExpressions;
+﻿using PrettyTable.PrinterService;
 
 namespace PrettyTable.Models;
 
 public interface IGrid
 {
-	int Rows { get; }
-	int Columns { get; }
-	GridOptions Options { get; }
+	int RowCount { get; }
+	int ColumnCount { get; }
+	Options Options { get; }
 	/// <summary>
 	/// 
 	/// </summary>
@@ -26,21 +26,21 @@ public class Grid : IGrid
 {
 	private IList<Cell> _cells;
 	private IList<GridRow> _cells2d = new List<GridRow>();
-	public int Rows { get; private set; } = 0;
-	public int Columns { get; private set; } = 0;
-	public GridOptions Options { get; }
+	public int RowCount { get; private set; } = 0;
+	public int ColumnCount { get; private set; } = 0;
+	public Options Options { get; }
 
-	public Grid(GridOptions? options = null)
+	public Grid(Options? options = null)
 	{
-		Options = options ?? new GridOptions();
+		Options = options ?? new Options();
 	}
 
 	internal void AddRow(GridRow row)
 	{
 		var length = row.Count;
-		Columns = Columns < length ? length : Columns;
+		ColumnCount = ColumnCount < length ? length : ColumnCount;
 		_cells2d.Add(row);
-		Rows++;
+		RowCount++;
 	}
 
 	public int GetCellWidth(int row, int column)
@@ -82,22 +82,22 @@ public class Grid : IGrid
 
 	internal void Normalize()
 	{
-		if (GridOptions.AddEmptyCellsAsNeeded)
+		if (Options.AddEmptyCellsAsNeeded)
 		{
 			foreach (var row in _cells2d)
 			{
-				if (row.Count < Columns)
+				if (row.Count < ColumnCount)
 				{
-					row.AddRange(Enumerable.Repeat(0, Columns - row.Count).Select(x => new Cell("")));
+					row.AddRange(Enumerable.Repeat(0, ColumnCount - row.Count).Select(x => new Cell("")));
 				}
 			}
 		}
 
-		if (GridOptions.EqualizeCellWidthInColumn)
+		if (Options.EqualizeCellWidthInColumn)
 		{
-			for (var i = 0; i < Columns; i++)
+			for (var i = 0; i < ColumnCount; i++)
 			{
-				var cells = new List<Cell>(Rows);
+				var cells = new List<Cell>(RowCount);
 				foreach (var row in _cells2d)
 				{
 					var cell = row[i];
@@ -109,6 +109,12 @@ public class Grid : IGrid
 				cells.ForEach(c => c.SetTotalWidth(maxWidth));
 			}
 		}
+	}
+
+	public override string ToString()
+	{
+		Normalize();
+		return this.Stringify();
 	}
 }
 
@@ -131,13 +137,13 @@ public static class GridExtensions
 		return self;
 	}
 
-	public static void Print(this IGrid grid)
+	public static string Stringify(this IGrid grid)
 	{
-		Printer.Print(grid);
+		return new Printer(grid).Print();
 	}
 }
 
-public class GridOptions
+public class Options
 {
 	public const bool AddEmptyCellsAsNeeded = true;
 	public const bool EqualizeCellWidthInColumn = true;

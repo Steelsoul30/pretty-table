@@ -1,38 +1,36 @@
 ﻿using System.Text;
-using System.Xml;
 using PrettyTable.Models;
 
-namespace PrettyTable;
+namespace PrettyTable.PrinterService;
 
-public static class Printer
+internal class Printer
 {
-	private static IGrid? _grid;
+	private IGrid _grid;
 	private static StringBuilder _sb = new();
-	private static readonly object _printerLock = new();
 	private static readonly SeparatorLine _topLine = new((char)BoxCharacters.DownRight, (char)BoxCharacters.DownHorizontal, (char)BoxCharacters.DownLeft);
 	private static readonly SeparatorLine _midLine = new((char)BoxCharacters.VerticalRight, (char)BoxCharacters.VerticalHorizontal, (char)BoxCharacters.VerticalLeft);
 	private static readonly SeparatorLine _bottomLine = new((char)BoxCharacters.UpRight, (char)BoxCharacters.UpHorizontal, (char)BoxCharacters.UpLeft);
 
-	public static void Print(IGrid grid)
+	public Printer(IGrid grid)
 	{
-		if (grid == null) throw new ArgumentNullException(nameof(grid));
-		lock (_printerLock)
-		{
-			_grid = grid;
-			_sb = new StringBuilder();
-			for (var i = 0; i < _grid.Rows; i++)
-			{
-				PrintRow(i);
-			}
-			Console.Write(_sb);
-			_sb.Clear();
-		}
+		_grid = grid;
 	}
 
-	private static void PrintRow(int row)
+	public string Print()
+	{
+		_sb = new StringBuilder();
+		for (var i = 0; i < _grid.RowCount; i++)
+		{
+			PrintRow(i);
+		}
+
+		return _sb.ToString();
+	}
+
+	private void PrintRow(int row)
 	{
 		var isFirstRow = row == 0;
-		var isLastRow = row == _grid!.Rows - 1;
+		var isLastRow = row == _grid!.RowCount - 1;
 		var cellCount = _grid.GetCellCount(row);
 		if (cellCount == 0) return;
 		if (isFirstRow)
@@ -55,7 +53,7 @@ public static class Printer
 			PrintSeparator(cellCount, _bottomLine);
 	}
 
-	private static void PrintSeparator(int cellCount, SeparatorLine separator)
+	private void PrintSeparator(int cellCount, SeparatorLine separator)
 	{
 		_sb.Append(separator.First);
 		for (var i = 0; i < cellCount; i++)
@@ -70,7 +68,7 @@ public static class Printer
 		_sb.Append(separator.Last).AppendLine();
 	}
 
-	private static void PrintLine(int row, string[]? content = null)
+	private void PrintLine(int row, string[]? content = null)
 	{
 		var cellCount = _grid!.GetCellCount(row);
 		_sb.Append((char)BoxCharacters.Vertical);
