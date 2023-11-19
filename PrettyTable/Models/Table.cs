@@ -4,7 +4,7 @@ using PrettyTable.PrinterService;
 
 namespace PrettyTable.Models;
 
-public class Table : DataTable, IWithRow, IWithColumn, IGrid
+public class Table : DataTable, IGrid, IWithRow, IWithColumn
 {
 	public Options Options { get; }
 	public int RowCount => Rows.Count;
