@@ -30,4 +30,9 @@ internal class Cell
 			diff--;
 		} while (diff > 0);
 	}
+
+	public override string ToString()
+	{
+		return Content;
+	}
 }
