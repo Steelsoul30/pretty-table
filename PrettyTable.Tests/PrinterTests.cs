@@ -41,13 +41,57 @@ namespace PrettyTable.Tests
 		}
 
 		[Fact]
-		public void TableTest()
+		public void TableTestRows()
 		{
-
+			var expected = 
+				@"┌─────────┬────────┬───────┐
+│         │        │       │
+│  first  │ second │ third │
+│         │        │       │
+├─────────┼────────┼───────┤
+│         │        │       │
+│ fourth  │ fifth  │ sixth │
+│         │        │       │
+├─────────┼────────┼───────┤
+│         │        │       │
+│ seventh │ eighth │ ninth │
+│         │        │       │
+└─────────┴────────┴───────┘
+";
 			var firstRow = new[] { "first", "second", "third" };
 			var secondRow = new[] { "fourth", "fifth", "sixth" };
 			var thirdRow = new[] { "seventh", "eighth", "ninth" };
 			var actual = new Table(new Options()).AddRow(firstRow).AddRow(secondRow).AddRow(thirdRow).ToString();
+			_output.WriteLine(actual);
+			_output.WriteLine(expected);
+			Assert.Equal(expected, actual);
+		}
+
+		[Fact]
+		public void TableTestColumns()
+		{
+			var expected =
+				@"┌─────────┬────────┬───────┐
+│         │        │       │
+│  first  │ second │ third │
+│         │        │       │
+├─────────┼────────┼───────┤
+│         │        │       │
+│ fourth  │ fifth  │ sixth │
+│         │        │       │
+├─────────┼────────┼───────┤
+│         │        │       │
+│ seventh │ eighth │ ninth │
+│         │        │       │
+└─────────┴────────┴───────┘
+";
+			var firstCol = new[] { "first", "fourth", "seventh" };
+			var secondCol = new[] { "second", "fifth", "eighth" };
+			var thirdCol = new[] { "third", "sixth", "ninth" };
+			var actual = new Table(new Options()).AddColumn(firstCol).AddColumn(secondCol).AddColumn(thirdCol).ToString();
+			_output.WriteLine(actual);
+			_output.WriteLine(expected);
+			Assert.Equal(expected, actual);
 		}
 
 		private string GetUniqueKey(int size)
