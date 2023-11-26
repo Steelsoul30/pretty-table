@@ -4,6 +4,12 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Title>Pretty Table</Title>
+    <Authors>Steelsoul</Authors>
+    <RepositoryUrl>https://github.com/Steelsoul30/pretty-table</RepositoryUrl>
+    <PackageTags>pretty;print;table;grid;console</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>

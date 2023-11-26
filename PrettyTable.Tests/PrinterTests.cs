@@ -94,6 +94,62 @@ namespace PrettyTable.Tests
 			Assert.Equal(expected, actual);
 		}
 
+		[Fact]
+		public void TableTestMixedColThenRow()
+		{
+			var expected =
+				@"┌─────────┬───────┬────────┐
+│         │       │        │
+│  first  │       │        │
+│         │       │        │
+├─────────┼───────┼────────┤
+│         │       │        │
+│ fourth  │       │        │
+│         │       │        │
+├─────────┼───────┼────────┤
+│         │       │        │
+│ seventh │       │        │
+│         │       │        │
+├─────────┼───────┼────────┤
+│         │       │        │
+│ second  │ fifth │ eighth │
+│         │       │        │
+└─────────┴───────┴────────┘
+";
+			var firstCol = new[] { "first", "fourth", "seventh" };
+			var secondCol = new[] { "second", "fifth", "eighth" };
+			var actual = new Table(new Options()).AddColumn(firstCol).AddRow(secondCol).ToString();
+			_output.WriteLine(actual);
+			_output.WriteLine(expected);
+			Assert.Equal(expected, actual);
+		}
+
+		[Fact]
+		public void TableTestMixedRowThenCol()
+		{
+			var expected =
+				@"┌───────┬────────┬───────┬────────┐
+│       │        │       │        │
+│ first │ second │ third │ fourth │
+│       │        │       │        │
+├───────┼────────┼───────┼────────┤
+│       │        │       │        │
+│       │        │       │ fifth  │
+│       │        │       │        │
+├───────┼────────┼───────┼────────┤
+│       │        │       │        │
+│       │        │       │ sixth  │
+│       │        │       │        │
+└───────┴────────┴───────┴────────┘
+";
+			var firstCol = new[] { "first", "second", "third" };
+			var secondCol = new[] { "fourth", "fifth", "sixth" };
+			var actual = new Table(new Options()).AddRow(firstCol).AddColumn(secondCol).ToString();
+			_output.WriteLine(actual);
+			_output.WriteLine(expected);
+			Assert.Equal(expected, actual);
+		}
+
 		private string GetUniqueKey(int size)
 		{
 			var bitCount = size * 6;

@@ -1,10 +1,9 @@
 ﻿using System.Data;
-using System.Security.Cryptography;
 using PrettyTable.PrinterService;
 
 namespace PrettyTable.Models;
 
-public class Table : DataTable, IGrid, IWithRow, IWithColumn
+public class Table : DataTable, IGrid
 {
 	public Options Options { get; }
 	public int RowCount => Rows.Count;
@@ -17,7 +16,7 @@ public class Table : DataTable, IGrid, IWithRow, IWithColumn
 		Options = options ?? new Options();
 	}
 
-	public IWithRow AddRow(IEnumerable<string> rowData)
+	public Table AddRow(IEnumerable<string> rowData)
 	{
 		var data = rowData.ToList();
 		var diff = data.Count - ColumnCount;
@@ -26,7 +25,9 @@ public class Table : DataTable, IGrid, IWithRow, IWithColumn
 			case > 0: // more data than columns
 				for (var i = 0; i < diff; i++)
 				{
-					Columns.Add(null, typeof(Cell), string.Empty);
+					var column = new DataColumn(null, typeof(Cell));
+					column.DefaultValue = new Cell(string.Empty);
+					Columns.Add(column);
 				}
 				break;
 			case < 0: // less data than columns
@@ -47,9 +48,10 @@ public class Table : DataTable, IGrid, IWithRow, IWithColumn
 		return this;
 	}
 
-	public IWithColumn AddColumn(IEnumerable<string> columnData)
+	public Table AddColumn(IEnumerable<string> columnData)
 	{
 		var data = columnData.ToList();
+		Columns.Add(null, typeof(Cell), string.Empty);
 		var diff = data.Count - RowCount;
 		switch (diff)
 		{
@@ -66,8 +68,6 @@ public class Table : DataTable, IGrid, IWithRow, IWithColumn
 				}
 				break;
 		}
-
-		Columns.Add(null, typeof(Cell), string.Empty);
 		for (var i = 0 ; i < RowCount ; i++)
 		{
 			Rows[i][ColumnCount - 1] = new Cell(data[i]);
