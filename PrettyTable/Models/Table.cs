@@ -11,9 +11,24 @@ public class Table : DataTable, IGrid
 
 	private List<string>? _headers;
 
+	public static Table FromDataTable(DataTable source)
+	{
+		var result = new Table();
+		foreach (DataRow sourceRow in source.Rows)
+		{
+			result.AddRow(sourceRow.ItemArray);
+		}
+		return result;
+	}
+
 	public Table(Options? options = null)
 	{
 		Options = options ?? new Options();
+	}
+
+	public Table AddRow(IEnumerable<object?> rowData)
+	{
+		return AddRow(rowData.Select(x => x?.ToString() ?? string.Empty));
 	}
 
 	public Table AddRow(IEnumerable<string> rowData)
