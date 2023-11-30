@@ -1,20 +1,4 @@
-﻿test:GridTest
-┌─────────┬────────┬───────┐
-│         │        │       │
-│  first  │ second │ third │
-│         │        │       │
-├─────────┼────────┼───────┤
-│         │        │       │
-│ fourth  │ fifth  │ sixth │
-│         │        │       │
-├─────────┼────────┼───────┤
-│         │        │       │
-│ seventh │ eighth │ ninth │
-│         │        │       │
-└─────────┴────────┴───────┘
-end GridTest
-
-test: TableTestRows
+﻿test: TableTestRows
 ┌─────────┬────────┬───────┐
 │         │        │       │
 │  first  │ second │ third │

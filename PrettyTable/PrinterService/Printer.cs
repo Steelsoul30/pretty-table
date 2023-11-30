@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using PrettyTable.Models;
+using PrettyTable.Interfaces;
 
 namespace PrettyTable.PrinterService;
 

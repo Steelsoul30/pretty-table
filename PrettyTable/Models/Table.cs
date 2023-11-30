@@ -1,11 +1,12 @@
 ﻿using System.Data;
+using PrettyTable.Interfaces;
 using PrettyTable.PrinterService;
 
 namespace PrettyTable.Models;
 
 public class Table : DataTable, IGrid
 {
-	public Options Options { get; }
+	public GridOptions GridOptions { get; }
 	public int RowCount => Rows.Count;
 	public int ColumnCount => Columns.Count;
 
@@ -21,10 +22,16 @@ public class Table : DataTable, IGrid
 		return result;
 	}
 
-	public Table(Options? options = null)
+	public Table(GridOptions? options = null)
 	{
-		Options = options ?? new Options();
+		GridOptions = options ?? new GridOptions();
 	}
+
+    public Table AddHeaders(IEnumerable<string> headers)
+    {
+        _headers = headers.ToList();
+        return this;
+    }
 
 	public Table AddRow(IEnumerable<object?> rowData)
 	{
@@ -40,9 +47,11 @@ public class Table : DataTable, IGrid
 			case > 0: // more data than columns
 				for (var i = 0; i < diff; i++)
 				{
-					var column = new DataColumn(null, typeof(Cell));
-					column.DefaultValue = new Cell(string.Empty);
-					Columns.Add(column);
+                    var column = new DataColumn(null, typeof(Cell))
+                    {
+                        DefaultValue = new Cell(string.Empty)
+                    };
+                    Columns.Add(column);
 				}
 				break;
 			case < 0: // less data than columns
@@ -123,6 +132,17 @@ public class Table : DataTable, IGrid
 		return dataRow.ItemArray.Select(x => x?.ToString() ?? string.Empty).ToArray();
 	}
 
+    public string[] GetHeaders()
+    {
+        if (_headers != null) return _headers.ToArray();
+        var result = new string[ColumnCount];
+        for (var i = 0; i < ColumnCount; i++)
+        {
+			result[i] = Columns[i].ColumnName;
+        }
+        return result;
+    }
+
 	public override string ToString()
 	{
 		Normalize();
@@ -131,7 +151,7 @@ public class Table : DataTable, IGrid
 
 	private void Normalize()
 	{
-		if (Options.EqualizeCellWidthInColumn)
+		if (GridOptions.EqualizeCellWidthInColumn)
 		{
 			for (var i = 0; i < ColumnCount; i++)
 			{
@@ -147,14 +167,4 @@ public class Table : DataTable, IGrid
 			}
 		}
 	}
-}
-
-public interface IWithRow
-{
-	public IWithRow AddRow(IEnumerable<string> rowData);
-}
-
-public interface IWithColumn
-{
-	public IWithColumn AddColumn(IEnumerable<string> colData);
 }

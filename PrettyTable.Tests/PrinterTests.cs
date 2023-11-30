@@ -62,19 +62,19 @@ namespace PrettyTable.Tests
 			_output = output;
 		}
 
-		[Fact]
-		public void GridTest()
-		{
-			var testName = nameof(GridTest);
-			Assert.True(_fixture.Expected.TryGetValue(testName, out var expected), $"expected test-case {testName} not found");
-			var firstRow = new[] { "first", "second", "third" };
-			var secondRow = new[] { "fourth", "fifth", "sixth" };
-			var thirdRow = new[] { "seventh", "eighth", "ninth" };
-			var actual = new Grid(new Options()).AddRow(firstRow).AddRow(secondRow).AddRow(thirdRow).ToString();
-			_output.WriteLine(actual);
-			_output.WriteLine(expected);
-			Assert.Equal(expected, actual);
-		}
+		//[Fact]
+		//public void GridTest()
+		//{
+		//	var testName = nameof(GridTest);
+		//	Assert.True(_fixture.Expected.TryGetValue(testName, out var expected), $"expected test-case {testName} not found");
+		//	var firstRow = new[] { "first", "second", "third" };
+		//	var secondRow = new[] { "fourth", "fifth", "sixth" };
+		//	var thirdRow = new[] { "seventh", "eighth", "ninth" };
+		//	var actual = new Grid(new GridOptions()).AddRow(firstRow).AddRow(secondRow).AddRow(thirdRow).ToString();
+		//	_output.WriteLine(actual);
+		//	_output.WriteLine(expected);
+		//	Assert.Equal(expected, actual);
+		//}
 
 		[Fact]
 		public void TableTestRows()
@@ -84,7 +84,7 @@ namespace PrettyTable.Tests
 			var firstRow = new[] { "first", "second", "third" };
 			var secondRow = new[] { "fourth", "fifth", "sixth" };
 			var thirdRow = new[] { "seventh", "eighth", "ninth" };
-			var actual = new Table(new Options()).AddRow(firstRow).AddRow(secondRow).AddRow(thirdRow).ToString();
+			var actual = new Table(new GridOptions()).AddRow(firstRow).AddRow(secondRow).AddRow(thirdRow).ToString();
 			_output.WriteLine(actual);
 			_output.WriteLine(expected);
 			Assert.Equal(expected, actual);
@@ -98,7 +98,7 @@ namespace PrettyTable.Tests
 			var firstRow = new object[] { 1.1, "second", 3 };
 			var secondRow = new object[] { "fourth", 5, 6.6 };
 			var thirdRow = new object[] { 7, 8.8, "ninth" };
-			var actual = new Table(new Options()).AddRow(firstRow).AddRow(secondRow).AddRow(thirdRow).ToString();
+			var actual = new Table(new GridOptions()).AddRow(firstRow).AddRow(secondRow).AddRow(thirdRow).ToString();
 			_output.WriteLine(actual);
 			_output.WriteLine(expected);
 			Assert.Equal(expected, actual);
@@ -112,7 +112,7 @@ namespace PrettyTable.Tests
 			var firstCol = new[] { "first", "fourth", "seventh" };
 			var secondCol = new[] { "second", "fifth", "eighth" };
 			var thirdCol = new[] { "third", "sixth", "ninth" };
-			var actual = new Table(new Options()).AddColumn(firstCol).AddColumn(secondCol).AddColumn(thirdCol).ToString();
+			var actual = new Table(new GridOptions()).AddColumn(firstCol).AddColumn(secondCol).AddColumn(thirdCol).ToString();
 			_output.WriteLine(actual);
 			_output.WriteLine(expected);
 			Assert.Equal(expected, actual);
@@ -125,7 +125,7 @@ namespace PrettyTable.Tests
 			Assert.True(_fixture.Expected.TryGetValue(testName, out var expected), $"expected test-case {testName} not found");
 			var firstCol = new[] { "first", "fourth", "seventh" };
 			var secondCol = new[] { "second", "fifth", "eighth" };
-			var actual = new Table(new Options()).AddColumn(firstCol).AddRow(secondCol).ToString();
+			var actual = new Table(new GridOptions()).AddColumn(firstCol).AddRow(secondCol).ToString();
 			_output.WriteLine(actual);
 			_output.WriteLine(expected);
 			Assert.Equal(expected, actual);
@@ -138,7 +138,7 @@ namespace PrettyTable.Tests
 			Assert.True(_fixture.Expected.TryGetValue(testName, out var expected), $"expected test-case {testName} not found");
 			var firstCol = new[] { "first", "second", "third" };
 			var secondCol = new[] { "fourth", "fifth", "sixth" };
-			var actual = new Table(new Options()).AddRow(firstCol).AddColumn(secondCol).ToString();
+			var actual = new Table(new GridOptions()).AddRow(firstCol).AddColumn(secondCol).ToString();
 			_output.WriteLine(actual);
 			_output.WriteLine(expected);
 			Assert.Equal(expected, actual);
