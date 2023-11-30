@@ -6,15 +6,19 @@ namespace PrettyTable.Models;
 
 public class Table : DataTable, IGrid
 {
-	public GridOptions GridOptions { get; }
 	public int RowCount => Rows.Count;
 	public int ColumnCount => Columns.Count;
 
+	private readonly GridOptions _gridOptions;
 	private List<string>? _headers;
 
-	public static Table FromDataTable(DataTable source)
+	public static Table FromDataTable(DataTable source, GridOptions? options = null)
 	{
-		var result = new Table();
+		var result = new Table(options);
+		if (options?.WithHeaders == true)
+		{
+			result.AddHeaders(source.Columns.Cast<DataColumn>().Select(x => x.ColumnName));
+		}
 		foreach (DataRow sourceRow in source.Rows)
 		{
 			result.AddRow(sourceRow.ItemArray);
@@ -24,13 +28,23 @@ public class Table : DataTable, IGrid
 
 	public Table(GridOptions? options = null)
 	{
-		GridOptions = options ?? new GridOptions();
+		_gridOptions = options ?? new GridOptions();
 	}
 
     public Table AddHeaders(IEnumerable<string> headers)
     {
         _headers = headers.ToList();
-        return this;
+        _gridOptions.WithHeaders = true;
+        AddRow(_headers);
+        if (RowCount != 1) // Headers wasn't the first row added
+        {
+	        var headerRow = Rows[RowCount - 1];
+			var newHeaderRow = NewRow();
+			newHeaderRow.ItemArray = (object[])headerRow.ItemArray.Clone();
+	        Rows.Remove(headerRow);
+	        Rows.InsertAt(newHeaderRow, 0);
+		}
+		return this;
     }
 
 	public Table AddRow(IEnumerable<object?> rowData)
@@ -134,6 +148,7 @@ public class Table : DataTable, IGrid
 
     public string[] GetHeaders()
     {
+		if (!_gridOptions.WithHeaders) return Array.Empty<string>();
         if (_headers != null) return _headers.ToArray();
         var result = new string[ColumnCount];
         for (var i = 0; i < ColumnCount; i++)
@@ -145,11 +160,11 @@ public class Table : DataTable, IGrid
 
 	public override string ToString()
 	{
-		Normalize();
+		PrepareForPrinting();
 		return new Printer(this).Print();
 	}
 
-	private void Normalize()
+	private void PrepareForPrinting()
 	{
 		if (GridOptions.EqualizeCellWidthInColumn)
 		{

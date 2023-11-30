@@ -97,3 +97,58 @@ test: TableFromDataTable
 │         │   │     │
 └─────────┴───┴─────┘
 end TableFromDataTable
+
+test: TableTestRowsWithHeader
+┌─────────┬─────────┬─────────┐
+│         │         │         │
+│ header1 │ header2 │ header3 │
+│         │         │         │
+├─────────┼─────────┼─────────┤
+│         │         │         │
+│  first  │ second  │  third  │
+│         │         │         │
+├─────────┼─────────┼─────────┤
+│         │         │         │
+│ fourth  │  fifth  │  sixth  │
+│         │         │         │
+├─────────┼─────────┼─────────┤
+│         │         │         │
+│ seventh │ eighth  │  ninth  │
+│         │         │         │
+└─────────┴─────────┴─────────┘
+end TableTestRowsWithHeader
+
+test: TableFromDataTableWithColumnNamestrue
+┌─────────┬─────────┬─────────┐
+│         │         │         │
+│ header1 │ header2 │ header3 │
+│         │         │         │
+├─────────┼─────────┼─────────┤
+│         │         │         │
+│  first  │    2    │   3.3   │
+│         │         │         │
+├─────────┼─────────┼─────────┤
+│         │         │         │
+│ fourth  │    5    │   6.6   │
+│         │         │         │
+├─────────┼─────────┼─────────┤
+│         │         │         │
+│ seventh │    8    │   9.9   │
+│         │         │         │
+└─────────┴─────────┴─────────┘
+end TableFromDataTableWithColumnNamestrue
+test: TableFromDataTableWithColumnNamesfalse
+┌─────────┬───┬─────┐
+│         │   │     │
+│  first  │ 2 │ 3.3 │
+│         │   │     │
+├─────────┼───┼─────┤
+│         │   │     │
+│ fourth  │ 5 │ 6.6 │
+│         │   │     │
+├─────────┼───┼─────┤
+│         │   │     │
+│ seventh │ 8 │ 9.9 │
+│         │   │     │
+└─────────┴───┴─────┘
+end TableFromDataTableWithColumnNamesfalse

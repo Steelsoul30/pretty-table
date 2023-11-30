@@ -62,20 +62,6 @@ namespace PrettyTable.Tests
 			_output = output;
 		}
 
-		//[Fact]
-		//public void GridTest()
-		//{
-		//	var testName = nameof(GridTest);
-		//	Assert.True(_fixture.Expected.TryGetValue(testName, out var expected), $"expected test-case {testName} not found");
-		//	var firstRow = new[] { "first", "second", "third" };
-		//	var secondRow = new[] { "fourth", "fifth", "sixth" };
-		//	var thirdRow = new[] { "seventh", "eighth", "ninth" };
-		//	var actual = new Grid(new GridOptions()).AddRow(firstRow).AddRow(secondRow).AddRow(thirdRow).ToString();
-		//	_output.WriteLine(actual);
-		//	_output.WriteLine(expected);
-		//	Assert.Equal(expected, actual);
-		//}
-
 		[Fact]
 		public void TableTestRows()
 		{
@@ -161,6 +147,49 @@ namespace PrettyTable.Tests
 			dataTable.Rows.Add("fourth", 5, 6.6f);
 			dataTable.Rows.Add("seventh", 8, 9.9f);
 			var actual = Table.FromDataTable(dataTable).ToString();
+			_output.WriteLine(actual);
+			_output.WriteLine(expected);
+			Assert.Equal(expected, actual);
+		}
+
+		[Theory]
+		[InlineData (true)]
+		[InlineData (false)]
+		public void TableFromDataTableWithColumnNames(bool withHeader)
+		{
+			var testName = nameof(TableFromDataTableWithColumnNames) + withHeader;
+			Assert.True(_fixture.Expected.TryGetValue(testName, out var expected), $"expected test-case {testName} not found");
+			var dataTable = new DataTable();
+			var columns = new DataColumn[]
+			{
+				new ("header1", typeof(string)),
+				new ("header2", typeof(int)),
+				new ("header3", typeof(float))
+			};
+			dataTable.Columns.AddRange(columns);
+			dataTable.Rows.Add("first", 2, 3.3f);
+			dataTable.Rows.Add("fourth", 5, 6.6f);
+			dataTable.Rows.Add("seventh", 8, 9.9f);
+			var actual = Table.FromDataTable(dataTable, new GridOptions() {WithHeaders = withHeader}).ToString();
+			_output.WriteLine(actual);
+			_output.WriteLine(expected);
+			Assert.Equal(expected, actual);
+		}
+
+		[Fact]
+		public void TableTestRowsWithHeader()
+		{
+			var testName = nameof(TableTestRowsWithHeader);
+			Assert.True(_fixture.Expected.TryGetValue(testName, out var expected), $"expected test-case {testName} not found");
+			var firstRow = new[] { "first", "second", "third" };
+			var secondRow = new[] { "fourth", "fifth", "sixth" };
+			var thirdRow = new[] { "seventh", "eighth", "ninth" };
+			var headers = new[] { "header1", "header2", "header3" };
+			var actual = new Table(new GridOptions()).AddHeaders(headers).AddRow(firstRow).AddRow(secondRow).AddRow(thirdRow).ToString();
+			_output.WriteLine(actual);
+			_output.WriteLine(expected);
+			Assert.Equal(expected, actual);
+			actual = new Table(new GridOptions()).AddRow(firstRow).AddRow(secondRow).AddHeaders(headers).AddRow(thirdRow).ToString();
 			_output.WriteLine(actual);
 			_output.WriteLine(expected);
 			Assert.Equal(expected, actual);

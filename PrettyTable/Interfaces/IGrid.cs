@@ -6,7 +6,7 @@ public interface IGrid
 {
     int RowCount { get; }
     int ColumnCount { get; }
-    GridOptions GridOptions { get; }
+    // GridOptions GridOptions { get; }
     /// <summary>
     /// 
     /// </summary>
